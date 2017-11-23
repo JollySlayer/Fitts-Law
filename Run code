@@ -1,0 +1,95 @@
+using System;
+using System.Windows.Forms;
+using System.Drawing;
+
+
+class Window //de static void main die ten alle tijd nodig is.
+{
+    static void Main()
+    {
+
+        HalloForm scherm;
+        scherm = new HalloForm();
+        Application.Run(scherm);
+
+    }
+}
+class HalloForm : Form
+{
+    DateTime tijd1, tijd2;
+    public HalloForm() //Start van het programma, hier wordt de window gemaakt en de eerste button gezet.
+    {
+        Console.WriteLine("Schermgroote " + Screen.PrimaryScreen.Bounds);
+        this.BackColor = Color.White;
+        this.WindowState = FormWindowState.Maximized;
+        int height = Screen.PrimaryScreen.Bounds.Height;
+        int width = Screen.PrimaryScreen.Bounds.Width;
+        this.Size = new Size(width, height);
+        Label Intro;
+        Button Fitts;
+        DateTime tijd1;
+        Fitts = new Button();
+        Fitts.Size = new Size(30, 30);
+        Fitts.BackColor = Color.Blue;
+        int x = this.Width / 2 - Fitts.Width / 2;
+        int y = this.Height / 2 - Fitts.Width / 2;
+        Fitts.Location = new Point(x, y);
+        this.Controls.Add(Fitts);
+        Intro = new Label();
+        int v = y + 30;
+        int z = x - 150;
+        Intro.Text = "Dit is een test om Fitts Wet uit te testen. Druk op de knop om de test te starten!";
+        Intro.Location = new Point(z, v);
+        Intro.AutoSize = true;
+        this.Controls.Add(Intro);
+        Fitts.Click += Fitts_Click;
+        Fitts.Click += (sender, args) => { Fitts.Visible = false; }; //Gebruik lambda argumenten om de buttons onzichtbaar te maken. Had het beter in een global property kunnen zetten.
+        Fitts.Click += (sending, args) => { Intro.Visible = false; };
+        tijd1 = DateTime.Now;
+        Console.WriteLine(tijd1);
+    }
+    void Fitts_Click(object sender, EventArgs e) //Dit wordt aangeroepen aan het eind van HalloForm en laat een nieuwe button verschijnen.
+        {
+        Button NewFitts;
+        NewFitts = new Button();
+        Random a = new Random();
+        Random b = new Random();
+        NewFitts.BackColor = Color.Blue;
+        NewFitts.Size = new Size(30, 30);
+        int K = a.Next(this.Width-30);
+        int H = b.Next(this.Height-30);
+        NewFitts.Location = new Point(K, H);
+        this.Controls.Add(NewFitts);
+        NewFitts.Click += NewFitts_Click;
+        NewFitts.Click += (send, args) => { NewFitts.Visible = false; };
+        int D1 = this.Width - K;
+        int D2 = this.Height - H;
+        double D = Math.Sqrt(D1 ^ 2 + D2 ^ 2);
+        double W = 30;
+        Console.WriteLine("D "+D);
+        Console.WriteLine("W "+W);
+        double ID1 = Math.Log(10, 2);
+        double ID = ID1 * (1 + D / W);
+        Console.WriteLine("ID "+ID);
+        }
+
+    void NewFitts_Click(object sender, EventArgs e) //Dit is de laatste aanroep die door Fitts_Click wordt aangeroepen om de begin button neer te zetten en te loopen.
+    {
+      
+        tijd2 = DateTime.Now;
+        Button Fitts2;
+        Fitts2 = new Button();
+        Fitts2.BackColor = Color.Blue;
+        Fitts2.Size = new Size(30, 30);
+        int x = this.Width / 2 - Fitts2.Width / 2;
+        int y = this.Height / 2 - Fitts2.Width / 2;
+        Fitts2.Location = new Point(x, y);
+        this.Controls.Add(Fitts2);
+        Fitts2.Click += Fitts_Click;
+        Fitts2.Click += (sending, args) => { Fitts2.Visible = false; };
+        int T = (tijd2 - tijd1).Seconds;
+        Console.WriteLine("T "+T); 
+    }
+
+
+}
